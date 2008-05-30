@@ -59,8 +59,7 @@ module IAuthU
     def login(user, pass)
       identity = @auth.call(user,pass)
       if identity
-        creds = identity.delete("credentials")
-        req = @site.authentication_request(identity, creds)
+        req = @site.authentication_request(identity)
         resp = req.call
         [:true, resp.body]
       else

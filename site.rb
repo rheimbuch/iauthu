@@ -28,7 +28,9 @@ module IAuthU
     
     
     
-    def authentication_request(user, creds=[])
+    def authentication_request(user)
+      user = user.clone
+      creds = user.delete("credentials") || []
       tmp = []
       creds.each{|c| tmp << credentials[c]}
       
@@ -50,6 +52,10 @@ module IAuthU
       
       def debug_suffix(suffix)
         @site.debug_suffix = suffix
+      end
+      
+      def debug(bool=true)
+        @site.debug = bool
       end
       
       def shared_secret(str)
