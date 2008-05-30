@@ -3,5 +3,5 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 require 'iauthu/server'
 module IAuthU
-  
+  VERSION = '0.0.1'
 end
