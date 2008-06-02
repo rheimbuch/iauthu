@@ -29,15 +29,23 @@ module IAuthU
     
     
     def authentication_request(user)
+      raise SettingsError, "Site url must be set before sending request." unless url && !url.empty?
       user = user.clone
       creds = user.delete("credentials") || []
       tmp = []
       creds.each{|c| tmp << credentials[c]}
       
-      req = Request.new(user, tmp, self)
+      begin
+        req = Request.new(user, tmp, self)
+      rescue Request::MissingCredentialsError
+        raise MissingCredentialsError, "Credentials entry is missing in: #{user.inspect}"
+      end
       req.debug = debug
       req
     end
+    
+    class SettingsError < RuntimeError; end
+    class MissingCredentialsError < RuntimeError; end
     
     class Builder # :nodoc:
       def initialize

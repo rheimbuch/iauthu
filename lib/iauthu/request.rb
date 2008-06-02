@@ -16,7 +16,7 @@ module IAuthU
     def initialize(user, creds, site)
       @user = user
       @creds = creds.to_a
-      raise "Credentials cannot be empty." if @creds.empty?
+      raise MissingCredentialsError, "Credentials cannot be empty." if @creds.empty?
       @site = site
       @debug = false
     end
@@ -27,6 +27,8 @@ module IAuthU
       token, data = get_authorization_token(@user, @creds, @site.shared_secret)
       invoke_action(site_url, data, token)
     end
+    
+    class MissingCredentialsError < RuntimeError; end
     
     private
     
