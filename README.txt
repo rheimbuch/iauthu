@@ -1,26 +1,68 @@
 = IAuthU
 
-* FIX (url)
+* http://github.com/rheimbuch/iauthu
 
 == DESCRIPTION:
 
-FIX (describe your package)
+IAuthU provides a basic framework for building iTunesU authentication servers. 
 
 == FEATURES/PROBLEMS:
 
-* FIX (list of features or problems)
+* Features
+  * Support for iTunesU authentication system.
+  * Plug-able authentication back-ends.
+  * Includes authentication back-ends for basic LDAP and chained authentication sources.
+  * Supports running as CGI, FastCGI, WEBrick, Mongrel, etc using Rack
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+  require 'rubygems'
+  require 'iauthu'
+  require 'iauthu/authenticator/ldap'
+
+  server = IAuthU::Server.build do
+    site {
+       url "https://deimos.apple.com/WebObjects/Core.woa/Browse/somewhere.edu"
+       debug_suffix "/bcg495"
+       # debug
+       shared_secret "FDASFEFDASF$T%$FDFASD"
+       cred :admin, "Administrator@urn:mace:itunesu.com:sites:somewhere.edu"
+       cred :user, "Authenticated@urn:mace:itunesu.com:sites:somewhere.edu"
+       }
+
+   auth {
+     # Authenticate Users from LDAP
+     use IAuthU::Authenticator::LDAP.build {
+       servers "ldap.somewhere.edu"
+       login_format "uid=%s,ou=People,o=ldap.somewhere.edu,o=cp"
+       credentials [:user]
+       }
+
+     # Authenticate a custom admin user
+     use lambda {|user, pass|
+       if user == 'site' && pass == 'admin'
+         {"display_name" => "Site Administrator",
+           "email" => "support@somewhere.edu",
+           "credentials" => [:admin]}
+       end
+       }
+    }
+
+    run :webrick, :port => 9292
+  end
+
+  server.run
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+* Rack
+* Markaby
+* Ruby-HMAC
+* Net/LDAP
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+  gem install iauthu
 
 == LICENSE:
 
