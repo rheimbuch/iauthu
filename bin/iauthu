@@ -1,0 +1,156 @@
+#!/usr/bin/env ruby
+$:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+require 'rubygems'
+require 'optparse'
+require 'ostruct'
+require 'erb'
+require 'iauthu'
+
+GLOBAL_CONFIG = {:trace => false}
+
+
+module IAuthU
+  module Command
+    
+    CONFIG_FILE = "./iauthu.conf"
+    
+    def self.call(args)
+      options = Options.new(args)
+      
+      config_file = args.shift
+      config_file = CONFIG_FILE unless config_file && !config_file.empty?
+      
+      if options.opts["generate"]
+        # Generate a config file
+        self.generate_config(config_file, options.opts)
+      else
+        # Run the server
+        self.run_server(config_file, options.opts)
+      end
+      
+      
+    end
+    
+    def self.run_server(config, options={})
+      
+      if config && File.exist?(config)
+        file = File.read(config)
+        server = IAuthU::Server.build { eval(file) }
+        if ENV['REQUEST_METHOD'] # Detect if running as a cgi
+          server.runner = IAuthU::Server::Builder::RUNNERS[:cgi]
+        end
+        server.run
+      else
+        err = ""
+        raise "No config file is available.\n" \
+              "Specify a config file or run `iauthu -g [FILE]` to generate a config file."
+      end
+    end
+    
+    def self.generate_config(config, options={})
+      if File.exist?(config) && !options["force"]
+        raise "Config file '#{config}' already exists: will not overwrite." 
+      end
+      vars = OpenStruct.new options
+      template_dir = File.join(File.dirname(__FILE__), "..", "template")
+      template = File.read(File.join(template_dir, 'iauthu.conf.tmpl'))
+      result = ERB.new(template).result(vars.send(:binding))
+      File.open(config, "w") do |f|
+        f.puts result
+      end
+    end
+    
+    
+    class Options
+      def initialize(args)
+        @opts = {}
+        parser.parse!(args)
+      end
+      
+      attr_reader :parser
+      
+      def opts
+        @opts
+      end
+      
+      def config
+        @opts
+      end
+      
+      def banner
+        parser.to_s
+      end
+      
+      def parser
+        @parser ||= OptionParser.new do |opts|
+          opts.banner = "Usage: iauthu [CONFIG_FILE]"
+          opts.separator ""
+          opts.separator "If [CONFIG_FILE] is abscent, iauthu will look for iauthu.conf in the local directory."
+          opts.separator ""
+          
+          opts.on("-g", "--generate", "Generate a config file.") do
+            config["generate"] = true
+          end
+          
+          opts.on("--trace", "Enable error tracebacks and debugging output.") do |trace|
+            GLOBAL_CONFIG[:trace] = trace
+          end
+          
+          opts.separator ""
+          opts.separator "The following options apply only to config file generation."
+          opts.separator ""
+          
+          opts.on("-f", "--force", "Force generation & overwrite config file." ) do |force|
+            config["force"] = force
+          end
+          
+          opts.on("--url [URL]", "Set the iTunesU authentication url.") do |url|
+            config["url"] = url
+          end
+          
+          opts.on("--debug-suffix [SUFFIX]", "Set the iTunesU debug suffix.") do |str|
+            config["debug_suffix"] = str
+          end
+          
+          cred_help = "Set the iTunesU credentials. Format: shortName1::LongCred1;shortName2::LongCred2"
+          opts.on("--cred [CREDSTR]", cred_help) do |str|
+            creds = {}
+            str.split(",").each do |pair|
+              k,v = pair.split("::")
+              k.strip!
+              v.strip!
+              creds[k.to_sym] = v
+            end
+          config["creds"] = creds
+          end
+          
+          opts.on("--secret [SECRET]", "Set the iTunesU shared secret.") do |str|
+            config["shared_secret"] = str
+          end
+          
+          opts.separator ""
+
+          opts.on_tail("-v", "--version", "Display the software version.") do
+            puts IAuthU::VERSION
+            exit
+          end
+
+          opts.on_tail("-h", "--help", "Show this help message.") do
+            puts opts
+            exit
+          end
+        end
+      end
+    end
+    
+    
+  end
+end
+
+begin
+  IAuthU::Command.call(ARGV)
+rescue => ex
+  puts ex.message
+  raise ex if GLOBAL_CONFIG[:trace]
+  exit
+end

@@ -1,0 +1,58 @@
+site {
+    # Specify your iTunesU url
+    url "<%= url || "https://deimos.apple.com/WebObjects/Core.woa/Browse/foo.edu" %>"
+    
+    # Specify your debug suffix if you wish to use iTunesU authentication
+    # in debug mode.
+    <%= "#" unless debug_suffix %> debug_suffix "<%= debug_suffix || "/debug_suffix" %>"
+    
+    # Enable iTunesU authentication debugging. Must specify the debug_suffix.
+    debug <%= debug ? "true" : "false" %>
+    
+    # Shared authentication secret
+    shared_secret "<%= shared_secret || "SHARED-SECRET" %>"
+    
+    # List your iTunesU login credentials
+    # The form is:
+    # cred :shortname, "LongCred@urn:mace:itunesu.com:sites:urschool.edu"
+    <% unless creds.nil? 
+        creds.keys.each do |key| %>
+    cred <%= key.inspect %>, <%= creds[key].inspect %>
+    <%  end
+      end %>
+}
+
+auth {
+  
+  # Authenticate all users
+  use {|user, pass| 
+    {"display_name" => user,
+     "username" => user,
+     "credentials" => []
+    }
+  }
+  
+  # # Uncomment to Authenticate Users from LDAP
+  # use IAuthU::Authenticator::LDAP.build {
+  #   servers "ldap.urschool.edu"
+  #   login_format "uid=%s,ou=People,o=ldap.urschool.edu,o=cp"
+  #   credentials [:user]
+  # }
+  
+  
+  # # Uncomment to create a 'test' admin user
+  # use {|user, pass|
+  #   if user == 'test' && pass == 'test'
+  #     {"display_name" => "Site Administrator",
+  #       "email" => "acg-support@montana.edu",
+  #       "credentials" => [:admin]}
+  #   end
+  # }
+}
+
+# Specify how IAuthU should run.
+# Available options are: :cgi, :fastcgi, :webrick, :mongrel
+# Note: if a cgi environment is detected, IAuthU will run in
+# cgi mode regardless of this setting.
+
+run :webrick, :port => 9292
