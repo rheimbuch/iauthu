@@ -3,14 +3,13 @@ Manifest.txt
 README.txt
 Rakefile
 bin/iauthu
-example/sample_server.rb
 lib/iauthu.rb
 lib/iauthu/authenticator/base.rb
 lib/iauthu/authenticator/chained.rb
-lib/iauthu/ldap.rb
+lib/iauthu/authenticator/ldap.rb
 lib/iauthu/request.rb
 lib/iauthu/site.rb
 lib/iauthu/server.rb
 lib/iauthu/version.rb
-
+template/iauthu.conf.tmpl
 test/test_iauthu.rb
