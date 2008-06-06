@@ -16,7 +16,7 @@ module IAuthU
     def initialize(user, creds, site)
       @user = user
       @creds = creds.to_a
-      raise MissingCredentialsError, "Credentials cannot be empty." if @creds.empty?
+      #raise MissingCredentialsError, "Credentials cannot be empty." if @creds.empty?
       @site = site
       @debug = false
     end
