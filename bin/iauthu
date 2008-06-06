@@ -13,12 +13,15 @@ module IAuthU
   module Command
     
     CONFIG_FILE = "./iauthu.conf"
+    SYSTEM_CONFIG_FILE = "/etc/iauthu/iauthu.conf"
     
     def self.call(args)
       options = Options.new(args)
       
       config_file = args.shift
       config_file = CONFIG_FILE unless config_file && !config_file.empty?
+      config_file = SYSTEM_CONFIG_FILE unless File.exist?(config_file)
+        
       
       if options.opts["generate"]
         # Generate a config file
@@ -85,7 +88,7 @@ module IAuthU
         @parser ||= OptionParser.new do |opts|
           opts.banner = "Usage: iauthu [CONFIG_FILE]"
           opts.separator ""
-          opts.separator "If [CONFIG_FILE] is abscent, iauthu will look for iauthu.conf in the local directory."
+          opts.separator "If [CONFIG_FILE] is absent, iauthu will look for ./iauthu.conf and /etc/iauthu/iauthu.conf"
           opts.separator ""
           
           opts.on("-g", "--generate", "Generate a config file.") do
