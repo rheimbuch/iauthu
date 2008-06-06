@@ -96,7 +96,10 @@ module IAuthU
         
         attr_reader :auth
         
-        def use(authenticator, opts={})
+        def use(authenticator=nil, opts={}, &block)
+          if block && !authenticator
+            authenticator = block
+          end
           @auth.add authenticator, opts
         end
       end
