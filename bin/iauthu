@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 require 'rubygems'
+require 'fileutils'
 require 'optparse'
 require 'ostruct'
 require 'erb'
@@ -58,6 +59,9 @@ module IAuthU
       template_dir = File.join(File.dirname(__FILE__), "..", "template")
       template = File.read(File.join(template_dir, 'iauthu.conf.tmpl'))
       result = ERB.new(template).result(vars.send(:binding))
+      unless File.exist?(File.dirname(config))
+        FileUtils.mkdir_p(File.dirname(config))
+      end
       File.open(config, "w") do |f|
         f.puts result
       end
