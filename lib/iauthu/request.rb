@@ -76,7 +76,7 @@ module IAuthU
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-      puts token_hdrs.inspect
+      #puts token_hdrs.inspect
       response = http.request_post(uri.path, data, token_hdrs)
       return response
     end

@@ -48,7 +48,7 @@ module IAuthU
       else
         Rack::Response.new.finish do |res|
           logged_in, result = login(req.POST["username"], req.POST["password"])
-          puts result
+          #puts result
           res.write result
         end
       end
@@ -92,7 +92,7 @@ module IAuthU
     
     class Builder
       RUNNERS = { :cgi => Rack::Handler::CGI,
-                  :fastcgi => Rack::Handler::FastCGI,
+                  #:fastcgi => Rack::Handler::FastCGI,
                   :webrick => Rack::Handler::WEBrick,
                   :mongrel => Rack::Handler::Mongrel
         }
@@ -112,6 +112,7 @@ module IAuthU
       end
       
       def login_page(str_or_file=nil, &block)
+        return if str_or_file == :default
         if str_or_file
           if File.exist?(str_or_file)
             File.open(str_or_file) do |f|
