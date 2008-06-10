@@ -1,3 +1,29 @@
+# Specify how IAuthU should run.
+# Available options are: :cgi, :webrick, :mongrel
+# Note: if a cgi environment is detected, IAuthU will run in
+# cgi mode regardless of this setting.
+
+run :webrick, :port => 9292
+
+# Specify the log destination:
+# * :default == STDERR
+# * "/path/to/logfile"
+# * a Logger object
+# note: using STDOUT will interfere with cgi output
+
+logger :default     # :default | "/var/log/iauthu.log" | Logger.new("/var/logs/iauthu.log")
+
+
+# Specify the Login Page
+# Options include:
+#  * :default - displays the builtin login form
+#  * "/path/to/file.html" - displays specified file
+#  * "<html><title>...."  - use a raw html string
+#  * {...} - run a ruby block to generate the page. 
+#            For example, consider using markaby
+
+login_page :default
+
 site {
     # Specify your iTunesU url
     url "<%= url || "https://deimos.apple.com/WebObjects/Core.woa/Browse/foo.edu" %>"
@@ -12,9 +38,12 @@ site {
     # Shared authentication secret
     shared_secret "<%= shared_secret || "SHARED-SECRET" %>"
     
-    # List your iTunesU login credentials
-    # The form is:
-    # cred :shortname, "LongCred@urn:mace:itunesu.com:sites:urschool.edu"
+    # Define your iTunesU login credentials. The alias you specify 
+    # can be used to refer to that credential later in the authentication
+    # section.
+    #
+    # Example:
+    # cred :alias, "FullCred@urn:mace:itunesu.com:sites:urschool.edu"
     <% unless creds.nil? 
         creds.keys.each do |key| %>
     cred <%= key.inspect %>, <%= creds[key].inspect %>
@@ -51,9 +80,3 @@ auth {
   # }
 }
 
-# Specify how IAuthU should run.
-# Available options are: :cgi, :webrick, :mongrel
-# Note: if a cgi environment is detected, IAuthU will run in
-# cgi mode regardless of this setting.
-
-run :webrick, :port => 9292
