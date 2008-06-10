@@ -6,9 +6,10 @@ require 'rack/showexceptions'
 require 'rack/request'
 require 'rack/response'
 require 'markaby'
-
+require 'logger'
 
 module IAuthU
+  
   class Server
     def self.build(&block)
       b = Builder.new
@@ -23,9 +24,14 @@ module IAuthU
     end
     attr_accessor :site, :auth, :runner, :port, :login_page
     
+    def logger
+      CONFIG[:logger]
+    end
+    
     def run
       raise "Site config is required" unless @site
       raise "Auth config is required" unless @auth
+      logger.info "Running IAuthU with: #{@runner}"
       @runner.run(Rack::ShowExceptions.new(Rack::Lint.new(self)), :Port => @port)
     end
     
@@ -124,6 +130,17 @@ module IAuthU
           return
         else
           @server.login_page = block.call.to_s
+        end
+      end
+      
+      def logger(dest)
+        if dest == :default
+          dest = STDERR
+        end
+        if dest.kind_of?(IO) || dest.kind_of?(String) || dest.kind_of?(Symbol)
+          CONFIG[:logger] = Logger.new(dest)
+        else
+          CONFIG[:logger] = dest
         end
       end
       

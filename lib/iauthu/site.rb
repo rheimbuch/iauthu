@@ -1,4 +1,5 @@
 require File.join(File.dirname(__FILE__), 'request')
+require 'logger'
 module IAuthU
   
 =begin rdoc
@@ -26,7 +27,9 @@ module IAuthU
     end
     attr_accessor :url, :debug_suffix, :debug, :shared_secret, :credentials
     
-    
+    def logger
+      CONFIG[:logger]
+    end
     
     def authentication_request(user)
       raise SettingsError, "Site url must be set before sending request." unless url && !url.empty?

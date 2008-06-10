@@ -3,6 +3,7 @@ require 'net/http'
 require 'net/https'
 require 'hmac-sha2'
 require 'cgi'
+require 'logger'
 
 module IAuthU
   
@@ -23,7 +24,12 @@ module IAuthU
     
     attr_accessor :debug
     
+    def logger
+      CONFIG[:logger]
+    end
+    
     def call
+      logger.info "Sending request for: #{@user.inspect}"
       token, data = get_authorization_token(@user, @creds, @site.shared_secret)
       invoke_action(site_url, data, token)
     end
@@ -67,7 +73,8 @@ module IAuthU
         'time' => expiration.to_s,
         'signature' => sig.to_s
       }
-
+      logger.debug "Request Token: #{token.inspect}"
+      logger.debug "Request Params: #{buffer.inspect}"
       return token, buffer
     end
     
@@ -77,6 +84,7 @@ module IAuthU
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       #puts token_hdrs.inspect
+      logger.debug "Request sent to: #{site_url}"
       response = http.request_post(uri.path, data, token_hdrs)
       return response
     end
