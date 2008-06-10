@@ -13,15 +13,13 @@ GLOBAL_CONFIG = {:trace => false}
 module IAuthU
   module Command
     
-    CONFIG_FILE = "./iauthu.conf"
     SYSTEM_CONFIG_FILE = "/etc/iauthu/iauthu.conf"
     
     def self.call(args)
       options = Options.new(args)
       
       config_file = args.shift
-      config_file = CONFIG_FILE unless config_file && !config_file.empty?
-      config_file = SYSTEM_CONFIG_FILE unless File.exist?(config_file)
+      config_file = SYSTEM_CONFIG_FILE unless config_file && !config_file.empty?
         
       
       if options.opts["generate"]
