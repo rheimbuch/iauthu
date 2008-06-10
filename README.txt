@@ -46,7 +46,7 @@ IAuthU provides a basic iTunesU authentication server, along with libraries for 
 
 (The MIT License)
 
-Copyright (c) 2008 FIX
+Copyright (c) 2008 Ryan Heimbuch
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
