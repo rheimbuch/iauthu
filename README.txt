@@ -4,7 +4,7 @@
 
 == DESCRIPTION:
 
-IAuthU provides a basic framework for building iTunesU authentication servers. 
+IAuthU provides a basic iTunesU authentication server, along with libraries for building iTunesU authentication servers into your own application.
 
 == FEATURES/PROBLEMS:
 
@@ -16,42 +16,20 @@ IAuthU provides a basic framework for building iTunesU authentication servers.
 
 == SYNOPSIS:
 
-  require 'rubygems'
-  require 'iauthu'
-  require 'iauthu/authenticator/ldap'
+* Generate the config file in /etc/iauthu/iauthu.conf (see `iauthu -h` for all options)
 
-  server = IAuthU::Server.build do
-    site {
-       url "https://deimos.apple.com/WebObjects/Core.woa/Browse/somewhere.edu"
-       debug_suffix "/bcg495"
-       # debug
-       shared_secret "FDASFEFDASF$T%$FDFASD"
-       cred :admin, "Administrator@urn:mace:itunesu.com:sites:somewhere.edu"
-       cred :user, "Authenticated@urn:mace:itunesu.com:sites:somewhere.edu"
-       }
+    $ sudo iauthu -g
 
-   auth {
-     # Authenticate Users from LDAP
-     use IAuthU::Authenticator::LDAP.build {
-       servers "ldap.somewhere.edu"
-       login_format "uid=%s,ou=People,o=ldap.somewhere.edu,o=cp"
-       credentials [:user]
-       }
+* Edit /etc/iauthu/iauth.conf and fill in your iTunesU authentication settings.
 
-     # Authenticate a custom admin user
-     use lambda {|user, pass|
-       if user == 'site' && pass == 'admin'
-         {"display_name" => "Site Administrator",
-           "email" => "support@somewhere.edu",
-           "credentials" => [:admin]}
-       end
-       }
-    }
+* To run as a standalone server:
 
-    run :webrick, :port => 9292
-  end
+    $ iauthu
 
-  server.run
+* To run as a cgi, symlink the iauthu binary into your cgi-bin directory or any directory that allows executing cgi scripts:
+
+    $ ln -s /usr/bin/iauthu /usr/lib/cgi-bin/iauthu.cgi
+
 
 == REQUIREMENTS:
 
