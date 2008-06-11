@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), 'base')
 module IAuthU
-  module Authenticator
+  module Authenticator # :nodoc:
     
 =begin rdoc
   The Chained Authenticator allows multiple authentication objects to 

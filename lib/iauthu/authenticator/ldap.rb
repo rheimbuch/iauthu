@@ -2,7 +2,7 @@ require 'rubygems'
 require 'net/ldap'
 
 module IAuthU
-  module Authenticator
+  module Authenticator # :nodoc:
     class LDAP
       def self.build(&block)
         b = Builder.new

@@ -1,5 +1,5 @@
 module IAuthU
-  module Authenticator
+  module Authenticator # :nodoc:
     
 =begin rdoc
   IAuthU uses 'Authentication' objects to validate and authenticate users.

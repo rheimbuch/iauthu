@@ -47,8 +47,8 @@ module IAuthU
       req
     end
     
-    class SettingsError < RuntimeError; end
-    class MissingCredentialsError < RuntimeError; end
+    class SettingsError < RuntimeError # :nodoc:
+    end
     
     class Builder # :nodoc:
       def initialize
