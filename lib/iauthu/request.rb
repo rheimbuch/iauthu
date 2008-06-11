@@ -34,8 +34,6 @@ module IAuthU
       invoke_action(site_url, data, token)
     end
     
-    class MissingCredentialsError < RuntimeError; end
-    
     private
     
     def site_url
