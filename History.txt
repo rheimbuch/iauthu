@@ -1,3 +1,8 @@
+=== 0.0.2
+
+* Changed all instances of "iTunesU" to "iTunes U" per Apple
+* Added IAuthU::Authenticator::Open for easy authentication of all users.
+
 === 0.0.1 
 
 * Initial release
