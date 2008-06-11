@@ -4,12 +4,12 @@
 
 == DESCRIPTION:
 
-IAuthU provides a basic iTunesU authentication server, along with libraries for building iTunesU authentication servers into your own application.
+IAuthU provides a basic iTunes U authentication server, along with libraries for building iTunes U authentication servers into your own application.
 
 == FEATURES/PROBLEMS:
 
 * Features
-  * Support for iTunesU authentication system.
+  * Support for iTunes U authentication system.
   * Plug-able authentication back-ends.
   * Includes authentication back-ends for basic LDAP and chained authentication sources.
   * Supports running as CGI, FastCGI, WEBrick, Mongrel, etc using Rack
@@ -20,7 +20,7 @@ IAuthU provides a basic iTunesU authentication server, along with libraries for 
 
     $ sudo iauthu -g
 
-* Edit /etc/iauthu/iauth.conf and fill in your iTunesU authentication settings.
+* Edit /etc/iauthu/iauth.conf and fill in your iTunes U authentication settings.
 
 * To run as a standalone server:
 

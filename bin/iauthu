@@ -109,15 +109,15 @@ module IAuthU
             config["force"] = force
           end
           
-          opts.on("--url [URL]", "Set the iTunesU authentication url.") do |url|
+          opts.on("--url [URL]", "Set the iTunes U authentication url.") do |url|
             config["url"] = url
           end
           
-          opts.on("--debug-suffix [SUFFIX]", "Set the iTunesU debug suffix.") do |str|
+          opts.on("--debug-suffix [SUFFIX]", "Set the iTunes U debug suffix.") do |str|
             config["debug_suffix"] = str
           end
           
-          cred_help = "Set the iTunesU credentials. Format: shortName1::LongCred1;shortName2::LongCred2"
+          cred_help = "Set the iTunes U credentials. Format: shortName1::LongCred1;shortName2::LongCred2"
           opts.on("--cred [CREDSTR]", cred_help) do |str|
             creds = {}
             str.split(",").each do |pair|
@@ -129,7 +129,7 @@ module IAuthU
           config["creds"] = creds
           end
           
-          opts.on("--secret [SECRET]", "Set the iTunesU shared secret.") do |str|
+          opts.on("--secret [SECRET]", "Set the iTunes U shared secret.") do |str|
             config["shared_secret"] = str
           end
           

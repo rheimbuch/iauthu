@@ -74,7 +74,7 @@ module IAuthU
     end
     
     def login_form
-      page_title = "iTunesU Login"
+      page_title = "iTunes U Login"
       m = Markaby::Builder.new
       m.html do
         head { title page_title}

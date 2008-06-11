@@ -25,20 +25,20 @@ logger :default     # :default | "/var/log/iauthu.log" | Logger.new("/var/logs/i
 login_page :default
 
 site {
-    # Specify your iTunesU url
+    # Specify your iTunes U url
     url "<%= url || "https://deimos.apple.com/WebObjects/Core.woa/Browse/foo.edu" %>"
     
-    # Specify your debug suffix if you wish to use iTunesU authentication
+    # Specify your debug suffix if you wish to use iTunes U authentication
     # in debug mode.
     <%= "#" unless debug_suffix %> debug_suffix "<%= debug_suffix || "/debug_suffix" %>"
     
-    # Enable iTunesU authentication debugging. Must specify the debug_suffix.
+    # Enable iTunes U authentication debugging. Must specify the debug_suffix.
     debug <%= debug ? "true" : "false" %>
     
     # Shared authentication secret
     shared_secret "<%= shared_secret || "SHARED-SECRET" %>"
     
-    # Define your iTunesU login credentials. The alias you specify 
+    # Define your iTunes U login credentials. The alias you specify 
     # can be used to refer to that credential later in the authentication
     # section.
     #
