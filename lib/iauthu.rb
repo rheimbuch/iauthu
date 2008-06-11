@@ -4,6 +4,6 @@ $:.unshift(File.dirname(__FILE__)) unless
 require 'iauthu/server'
 require 'logger'
 module IAuthU
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
   CONFIG = {:logger => Logger.new(STDERR)}
 end
