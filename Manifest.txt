@@ -8,8 +8,8 @@ lib/iauthu/authenticator/base.rb
 lib/iauthu/authenticator/chained.rb
 lib/iauthu/authenticator/ldap.rb
 lib/iauthu/request.rb
-lib/iauthu/site.rb
 lib/iauthu/server.rb
+lib/iauthu/site.rb
 lib/iauthu/version.rb
 template/iauthu.conf.tmpl
 test/test_iauthu.rb
