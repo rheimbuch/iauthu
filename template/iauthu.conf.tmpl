@@ -54,12 +54,7 @@ site {
 auth {
   
   # Authenticate all users
-  use {|user, pass| 
-    {"display_name" => user,
-     "username" => user,
-     "credentials" => []
-    }
-  }
+  use IAuthU::Authenticator::Open
   
   # # Uncomment to Authenticate Users from LDAP
   # require 'iauthu/authenticator/ldap'

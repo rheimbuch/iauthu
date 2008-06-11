@@ -59,5 +59,14 @@ module IAuthU
         @sufficient = !!bool
       end
     end
+    
+    # Simple Authenticator for allowing all users. Useful for testing.
+    class Open
+      def self.call(user,pass)
+        { "display_name" => user,
+           "username" => user,
+           "credentials" => [] }
+      end
+    end
   end
 end
